@@ -16,7 +16,8 @@ fn main() {
 
     // loop in case the user enters something that is not an integer or not listed in available core choices
     loop {
-        println!("What core do you wish to use? 0. Paper or 1. Vanilla");
+        // used a newline for the list of available
+        println!("What server software do you wish to use?\n Current options (CASE SENSITIVE!!): Vanilla, Paper, Forge"); // forge worken't
     
         let mut core_choice = String::new();
     
@@ -29,15 +30,20 @@ fn main() {
     
         // matches the user choice
         match core_choice {
-            0 => {
+            
+            "Paper" => {
                 url = "https://api.papermc.io/v2/projects/paper/versions/1.19.4/builds/519/downloads/paper-1.19.4-519.jar".to_string();
                 break;
             }
-            1 => {
+            "Vanilla" => {
                 url = "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar".to_string();
                 break;
             }
-
+            "Forge" => {
+                url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar".to_string(); // must run command, ARTEM
+                break;
+            }
+            
             // user entered something that is not listed above
             _ => {
                 println!("Invalid input, try again!");
@@ -96,7 +102,7 @@ fn download_required_files(url: &String, download_folder: &String) -> Result<(),
         .arg(format!("{}", &out_path.display()))
         .output()
         .expect("Failed to extract the contents of .jar file!");
-
+    
     // creating a command that finishes the server setup
     println!("Finishing the server setup");
     let output = Command::new("java")
