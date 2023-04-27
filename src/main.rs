@@ -16,8 +16,7 @@ fn main() {
 
     // loop in case the user enters something that is not an integer or not listed in available core choices
     loop {
-        // used a newline for the list of available
-        println!("What server software do you wish to use?\n Current options (CASE SENSITIVE!!): Vanilla, Paper, Forge"); // forge worken't
+        println!("What server software do you wish to use?\n Current options: 0) Paper, 1) Vanilla, 2) Forge");
     
         let mut core_choice = String::new();
     
@@ -30,20 +29,20 @@ fn main() {
     
         // matches the user choice
         match core_choice {
-            
-            "Paper" => {
+            0 => {
                 url = "https://api.papermc.io/v2/projects/paper/versions/1.19.4/builds/519/downloads/paper-1.19.4-519.jar".to_string();
                 break;
             }
-            "Vanilla" => {
+            1 => {
                 url = "https://piston-data.mojang.com/v1/objects/8f3112a1049751cc472ec13e397eade5336ca7ae/server.jar".to_string();
                 break;
             }
-            "Forge" => {
-                url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar".to_string(); // must run command, ARTEM
+
+            2 => {
+                url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar".to_string();
                 break;
             }
-            
+
             // user entered something that is not listed above
             _ => {
                 println!("Invalid input, try again!");
@@ -62,7 +61,7 @@ fn main() {
 
     // makes a directory with user's Windows username, and a folder name that they've chosen
     let path = format!("C:\\Users\\{}\\Desktop\\{}", username, folder_name_choice);    
-
+    
     // checks if an error has occured making a folder
     match fs::create_dir(&path){
         Ok(_) => println!("Folder created!"),
@@ -102,6 +101,15 @@ fn download_required_files(url: &String, download_folder: &String) -> Result<(),
         .arg(format!("{}", &out_path.display()))
         .output()
         .expect("Failed to extract the contents of .jar file!");
+
+        if url == "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar"{
+            let output = Command::new("java")
+                .arg("-jar")
+                .arg("forge-1.19.4-installer.jar")
+                .arg("-installServer")
+                .output()
+                .expect("Failed to setup the server!");
+        }
     
     // creating a command that finishes the server setup
     println!("Finishing the server setup");
