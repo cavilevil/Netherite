@@ -16,7 +16,7 @@ fn main() {
 
     // loop in case the user enters something that is not an integer or not listed in available core choices
     loop {
-        println!("What core do you wish to use? 0. Paper or 1. Vanilla");
+        println!("What server software do you wish to use?\n Current options: 0) Paper, 1) Vanilla, 2) Forge");
     
         let mut core_choice = String::new();
     
@@ -38,6 +38,11 @@ fn main() {
                 break;
             }
 
+            2 => {
+                url = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar".to_string();
+                break;
+            }
+
             // user entered something that is not listed above
             _ => {
                 println!("Invalid input, try again!");
@@ -56,7 +61,7 @@ fn main() {
 
     // makes a directory with user's Windows username, and a folder name that they've chosen
     let path = format!("C:\\Users\\{}\\Desktop\\{}", username, folder_name_choice);    
-
+    
     // checks if an error has occured making a folder
     match fs::create_dir(&path){
         Ok(_) => println!("Folder created!"),
@@ -97,6 +102,15 @@ fn download_required_files(url: &String, download_folder: &String) -> Result<(),
         .output()
         .expect("Failed to extract the contents of .jar file!");
 
+        if url == "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.4-45.0.49/forge-1.19.4-45.0.49-installer.jar"{
+            let output = Command::new("java")
+                .arg("-jar")
+                .arg("forge-1.19.4-installer.jar")
+                .arg("-installServer")
+                .output()
+                .expect("Failed to setup the server!");
+        }
+    
     // creating a command that finishes the server setup
     println!("Finishing the server setup");
     let output = Command::new("java")
